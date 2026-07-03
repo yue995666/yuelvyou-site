@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>旅盒彩虹 TripBox</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --ink: #14221e;
+      --paper: #fff8df;
+      --sun: #ffd84d;
+      --coral: #ff6f8e;
+      --sky: #8ee7ff;
+      --leaf: #bdf36f;
+      --white: #fffef7;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    button, input, select, textarea { font: inherit; }
+    header {
+      padding: 18px clamp(18px, 5vw, 60px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+    .mark {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--sun) 0 38%, var(--sky) 38% 68%, var(--coral) 68%);
+      border: 2px solid var(--paper);
+    }
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    nav a {
+      color: var(--ink);
+      text-decoration: none;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: var(--white);
+      font-weight: 850;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+    main { padding: 0 clamp(18px, 5vw, 60px) 60px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.03fr) minmax(320px, .97fr);
+      gap: 26px;
+      align-items: stretch;
+    }
+    .intro {
+      background: var(--sun);
+      border: 3px solid var(--ink);
+      border-radius: 34px;
+      padding: clamp(24px, 5vw, 58px);
+      box-shadow: 10px 10px 0 var(--ink);
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+    .intro::after {
+      content: "";
+      position: absolute;
+      right: -64px;
+      top: 70px;
+      width: 220px;
+      height: 220px;
+      border: 3px solid var(--ink);
+      border-radius: 50%;
+      background: var(--sky);
+    }
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      width: fit-content;
+      background: var(--white);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 950;
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+    h1 {
+      position: relative;
+      z-index: 1;
+      margin: 24px 0 0;
+      max-width: 720px;
+      font-size: clamp(44px, 8vw, 96px);
+      line-height: .92;
+      letter-spacing: 0;
+    }
+    .lead {
+      position: relative;
+      z-index: 1;
+      max-width: 590px;
+      margin: 20px 0 0;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+    .quick {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .quick div {
+      min-height: 96px;
+      background: var(--white);
+      border: 3px solid var(--ink);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: 5px 5px 0 var(--ink);
+      font-weight: 900;
+    }
+    .quick b {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+    .photo-stack {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 30px;
+    }
+    .photo {
+      min-height: 170px;
+      border: 3px solid var(--ink);
+      border-radius: 26px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .photo:first-child {
+      background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80");
+    }
+    .photo:last-child {
+      background-image: url("https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80");
+    }
+    .designer {
+      background: var(--white);
+      border: 3px solid var(--ink);
+      border-radius: 34px;
+      box-shadow: 10px 10px 0 var(--ink);
+      padding: clamp(18px, 4vw, 28px);
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+    .designer h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+    label { font-weight: 950; }
+    input, select, textarea {
+      width: 100%;
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+      color: var(--ink);
+      padding: 14px 15px;
+      outline: none;
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .chip input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: none;
+      padding: 0;
+      border: 0;
+    }
+    .chip span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: #fff;
+      font-weight: 900;
+      box-shadow: 3px 3px 0 var(--ink);
+      cursor: pointer;
+    }
+    .chip input:checked + span { background: var(--leaf); }
+    .range-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    input[type="range"] {
+      padding: 0;
+      height: 36px;
+      box-shadow: none;
+      accent-color: var(--coral);
+    }
+    .price-badge {
+      min-width: 88px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: var(--sky);
+      padding: 8px 10px;
+      text-align: center;
+      font-weight: 950;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+    .submit {
+      min-height: 52px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: var(--coral);
+      color: var(--ink);
+      font-weight: 950;
+      box-shadow: 5px 5px 0 var(--ink);
+      cursor: pointer;
+    }
+    .plans {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .plan {
+      min-height: 300px;
+      border: 3px solid var(--ink);
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: 7px 7px 0 var(--ink);
+    }
+    .plan-img {
+      min-height: 150px;
+      background-size: cover;
+      background-position: center;
+      border-bottom: 3px solid var(--ink);
+    }
+    .plan:nth-child(1) .plan-img {
+      background-image: url("https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=80");
+    }
+    .plan:nth-child(2) .plan-img {
+      background-image: url("https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=900&q=80");
+    }
+    .plan:nth-child(3) .plan-img {
+      background-image: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80");
+    }
+    .plan-body { padding: 18px; }
+    .plan h3 {
+      margin: 0 0 10px;
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+    .plan p {
+      margin: 0;
+      line-height: 1.6;
+    }
+    .steps {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .step {
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 24px;
+      min-height: 150px;
+      padding: 18px;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .step b {
+      display: block;
+      width: fit-content;
+      background: var(--sky);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 960px) {
+      header { align-items: flex-start; flex-direction: column; }
+      nav { justify-content: flex-start; }
+      .hero, .plans, .steps { grid-template-columns: 1fr; }
+      .intro { min-height: auto; }
+      .quick { grid-template-columns: 1fr; }
+      .photo-stack, .pair { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="mark" aria-hidden="true"></span>旅盒彩虹 TripBox</div>
+    <nav aria-label="主导航">
+      <a href="#designer">定制需求</a>
+      <a href="#plans">灵感路线</a>
+      <a href="#steps">服务流程</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="intro">
+        <div>
+          <span class="eyebrow">旅行需求设计器</span>
+          <h1>把想去的地方，变成刚刚好的行程。</h1>
+          <p class="lead">告诉我们预算、天数、同行人和旅行偏好，TripBox 会把零散想法整理成一份可执行的路线草案。</p>
+          <div class="quick" aria-label="核心数据">
+            <div><b>3 min</b>完成需求</div>
+            <div><b>24 h</b>收到方案</div>
+            <div><b>1v1</b>行程微调</div>
+          </div>
+        </div>
+        <div class="photo-stack" aria-label="旅行场景图片">
+          <div class="photo" role="img" aria-label="海岛旅行"></div>
+          <div class="photo" role="img" aria-label="山野旅行"></div>
+        </div>
+      </div>
+
+      <form class="designer" id="designer">
+        <h2>先拼出你的旅行盒子</h2>
+        <div class="pair">
+          <div class="field">
+            <label for="destination">想去哪里</label>
+            <input id="destination" name="destination" value="日本关西 / 海岛 / 欧洲小镇">
+          </div>
+          <div class="field">
+            <label for="days">旅行天数</label>
+            <select id="days" name="days">
+              <option>3-4 天短途</option>
+              <option selected>5-7 天刚刚好</option>
+              <option>8-12 天深度游</option>
+              <option>两周以上慢旅行</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pair">
+          <div class="field">
+            <label for="people">同行成员</label>
+            <select id="people" name="people">
+              <option>一个人出发</option>
+              <option selected>情侣 / 朋友</option>
+              <option>亲子家庭</option>
+              <option>公司团建</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pace">旅行节奏</label>
+            <select id="pace" name="pace">
+              <option>轻松躺平</option>
+              <option selected>每天 2-3 个重点</option>
+              <option>高能打卡</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>喜欢的体验</label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" checked><span>美食</span></label>
+            <label class="chip"><input type="checkbox" checked><span>拍照</span></label>
+            <label class="chip"><input type="checkbox"><span>亲子</span></label>
+            <label class="chip"><input type="checkbox" checked><span>自然</span></label>
+            <label class="chip"><input type="checkbox"><span>博物馆</span></label>
+            <label class="chip"><input type="checkbox"><span>小众路线</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="budget">人均预算</label>
+          <div class="range-row">
+            <input id="budget" name="budget" type="range" min="2000" max="30000" value="9000">
+            <span class="price-badge">约 ¥9k</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="wish">特别需求</label>
+          <textarea id="wish" name="wish">想要住得舒服一点，少换酒店，希望安排一天可以自由散步和找咖啡馆。</textarea>
+        </div>
+        <button class="submit" type="button">生成我的旅行需求单</button>
+      </form>
+    </section>
+
+    <section class="plans" id="plans" aria-label="灵感路线">
+      <article class="plan">
+        <div class="plan-img" role="img" aria-label="城市与海湾"></div>
+        <div class="plan-body">
+          <h3>城市跳岛</h3>
+          <p>适合想拍照、吃好、住宿方便的人。路线紧凑但不赶，每天保留自由探索时间。</p>
+        </div>
+      </article>
+      <article class="plan">
+        <div class="plan-img" role="img" aria-label="海边度假"></div>
+        <div class="plan-body">
+          <h3>阳光慢假</h3>
+          <p>适合情侣、朋友和家庭。少换酒店，把海滩、餐厅、短途活动排成舒适节奏。</p>
+        </div>
+      </article>
+      <article class="plan">
+        <div class="plan-img" role="img" aria-label="山林湖泊"></div>
+        <div class="plan-body">
+          <h3>山野补电</h3>
+          <p>适合想远离城市的人。把徒步、温泉、湖边住宿和轻户外体验组合起来。</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="steps" id="steps" aria-label="服务流程">
+      <div class="step"><b>01</b>提交需求，整理旅行目标和限制条件。</div>
+      <div class="step"><b>02</b>匹配路线，输出第一版行程结构。</div>
+      <div class="step"><b>03</b>沟通微调，补齐酒店、交通和餐厅建议。</div>
+      <div class="step"><b>04</b>交付清单，出发前拿到可执行版本。</div>
+    </section>
+  </main>
+</body>
+</html>
