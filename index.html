@@ -234,7 +234,6 @@
       font-weight: 900;
       box-shadow: 3px 3px 0 var(--ink);
       cursor: pointer;
-<!-- trigger Pages rebuild -->
     }
     .chip input:checked + span { background: var(--leaf); }
     .range-row {
@@ -331,13 +330,169 @@
       padding: 6px 10px;
       margin-bottom: 14px;
     }
+    .membership {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, .85fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .member-card {
+      background: var(--white);
+      border: 3px solid var(--ink);
+      border-radius: 30px;
+      box-shadow: 8px 8px 0 var(--ink);
+      padding: clamp(18px, 4vw, 28px);
+    }
+    .member-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .member-head h2,
+    .member-head h3 {
+      margin: 0;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .member-head p {
+      margin: 8px 0 0;
+      line-height: 1.6;
+    }
+    .member-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: var(--sun);
+      font-weight: 950;
+      white-space: nowrap;
+    }
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .metric {
+      min-height: 92px;
+      border: 3px solid var(--ink);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 12px;
+    }
+    .metric span {
+      display: block;
+      font-size: 13px;
+      font-weight: 900;
+      opacity: .75;
+      margin-bottom: 10px;
+    }
+    .metric b {
+      font-size: 30px;
+      line-height: 1;
+    }
+    .member-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .tab-button {
+      min-height: 42px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--ink);
+      font-weight: 950;
+      padding: 0 14px;
+      cursor: pointer;
+    }
+    .tab-button.is-active {
+      background: var(--leaf);
+    }
+    .member-panel {
+      display: none;
+    }
+    .member-panel.is-active {
+      display: block;
+    }
+    .member-form {
+      display: grid;
+      gap: 14px;
+    }
+    .member-list {
+      overflow: auto;
+      border: 3px solid var(--ink);
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(20, 34, 30, .16);
+      vertical-align: top;
+    }
+    th {
+      background: #f7f4d7;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .table-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .mini-button {
+      min-height: 40px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: var(--sky);
+      font-weight: 950;
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 0 12px;
+      cursor: pointer;
+    }
+    .mini-button.ghost {
+      background: #fff;
+    }
+    .member-lock {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .inline-note {
+      font-size: 13px;
+      opacity: .72;
+      line-height: 1.5;
+    }
+    .empty-state {
+      padding: 18px;
+      text-align: center;
+      font-weight: 850;
+      color: rgba(20, 34, 30, .7);
+    }
     @media (max-width: 960px) {
       header { align-items: flex-start; flex-direction: column; }
       nav { justify-content: flex-start; }
-      .hero, .plans, .steps { grid-template-columns: 1fr; }
+      .hero, .plans, .steps, .membership { grid-template-columns: 1fr; }
       .intro { min-height: auto; }
       .quick { grid-template-columns: 1fr; }
       .photo-stack, .pair { grid-template-columns: 1fr; }
+      .member-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -348,6 +503,7 @@
       <a href="#designer">定制需求</a>
       <a href="#plans">灵感路线</a>
       <a href="#steps">服务流程</a>
+      <a href="#members">会员体系</a>
     </nav>
   </header>
 
@@ -466,6 +622,358 @@
       <div class="step"><b>03</b>沟通微调，补齐酒店、交通和餐厅建议。</div>
       <div class="step"><b>04</b>交付清单，出发前拿到可执行版本。</div>
     </section>
+
+    <section class="membership" id="members" aria-label="会员体系">
+      <div class="member-card">
+        <div class="member-head">
+          <div>
+            <h2>会员注册</h2>
+            <p>把注册会员沉淀下来，后续可以在后台查看、筛选和导出。</p>
+          </div>
+          <span class="member-pill">会员中心</span>
+        </div>
+
+        <form class="member-form" id="member-form">
+          <div class="pair">
+            <div class="field">
+              <label for="member-name">姓名</label>
+              <input id="member-name" name="name" autocomplete="name" placeholder="例如：小林" required>
+            </div>
+            <div class="field">
+              <label for="member-level">会员等级</label>
+              <select id="member-level" name="level">
+                <option value="普通会员">普通会员</option>
+                <option value="银卡会员">银卡会员</option>
+                <option value="金卡会员">金卡会员</option>
+                <option value="黑金会员">黑金会员</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pair">
+            <div class="field">
+              <label for="member-phone">手机</label>
+              <input id="member-phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="手机号" required>
+            </div>
+            <div class="field">
+              <label for="member-email">邮箱</label>
+              <input id="member-email" name="email" inputmode="email" autocomplete="email" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <div class="pair">
+            <div class="field">
+              <label for="member-city">常驻城市</label>
+              <input id="member-city" name="city" placeholder="例如：上海">
+            </div>
+            <div class="field">
+              <label for="member-source">来源渠道</label>
+              <select id="member-source" name="source">
+                <option>网站首页</option>
+                <option>活动页面</option>
+                <option>朋友推荐</option>
+                <option>其他渠道</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="member-note">备注</label>
+            <textarea id="member-note" name="note" placeholder="例如：喜欢海岛、亲子或小众路线"></textarea>
+          </div>
+
+          <button class="submit" type="submit">注册会员</button>
+          <div class="inline-note">说明：当前站点是静态页面，会员数据会保存到浏览器本地。若要多人共享会员库，需要接真实后端。</div>
+        </form>
+      </div>
+
+      <div class="member-card">
+        <div class="member-head">
+          <div>
+            <h3>会员后台</h3>
+            <p>查看已注册会员、筛选、搜索和删除。</p>
+          </div>
+          <span class="member-pill">后台</span>
+        </div>
+
+        <div class="member-lock" id="admin-lock">
+          <div class="field">
+            <label for="admin-pass">后台口令</label>
+            <input id="admin-pass" type="password" placeholder="输入后台口令">
+          </div>
+          <button class="mini-button" type="button" id="unlock-admin">进入后台</button>
+        </div>
+
+        <div class="member-panel" id="admin-panel" aria-live="polite">
+          <div class="member-grid">
+            <div class="metric">
+              <span>注册会员</span>
+              <b id="stat-total">0</b>
+            </div>
+            <div class="metric">
+              <span>今日新增</span>
+              <b id="stat-today">0</b>
+            </div>
+            <div class="metric">
+              <span>金卡以上</span>
+              <b id="stat-premium">0</b>
+            </div>
+          </div>
+
+          <div class="table-actions">
+            <input id="member-search" type="text" placeholder="搜索姓名 / 手机 / 邮箱" style="max-width: 260px;">
+            <select id="member-filter" style="max-width: 180px;">
+              <option value="all">全部等级</option>
+              <option value="普通会员">普通会员</option>
+              <option value="银卡会员">银卡会员</option>
+              <option value="金卡会员">金卡会员</option>
+              <option value="黑金会员">黑金会员</option>
+            </select>
+            <button class="mini-button" type="button" id="export-members">导出数据</button>
+            <button class="mini-button ghost" type="button" id="logout-admin">退出后台</button>
+          </div>
+
+          <div class="member-list">
+            <table>
+              <thead>
+                <tr>
+                  <th>姓名</th>
+                  <th>联系方式</th>
+                  <th>等级 / 来源</th>
+                  <th>注册时间</th>
+                  <th>备注</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="member-table-body"></tbody>
+            </table>
+            <div class="empty-state" id="member-empty" hidden>还没有注册会员。</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <script>
+    (() => {
+      const MEMBERS_KEY = 'tripbox-members-v1';
+      const ADMIN_KEY = 'tripbox-admin-unlocked-v1';
+      const ADMIN_PASSWORD = 'tripbox-admin';
+
+      const form = document.getElementById('member-form');
+      const adminLock = document.getElementById('admin-lock');
+      const adminPanel = document.getElementById('admin-panel');
+      const adminPass = document.getElementById('admin-pass');
+      const unlockBtn = document.getElementById('unlock-admin');
+      const logoutBtn = document.getElementById('logout-admin');
+      const exportBtn = document.getElementById('export-members');
+      const searchInput = document.getElementById('member-search');
+      const filterSelect = document.getElementById('member-filter');
+      const tableBody = document.getElementById('member-table-body');
+      const emptyState = document.getElementById('member-empty');
+      const statTotal = document.getElementById('stat-total');
+      const statToday = document.getElementById('stat-today');
+      const statPremium = document.getElementById('stat-premium');
+
+      const nameInput = document.getElementById('member-name');
+      const levelInput = document.getElementById('member-level');
+      const phoneInput = document.getElementById('member-phone');
+      const emailInput = document.getElementById('member-email');
+      const cityInput = document.getElementById('member-city');
+      const sourceInput = document.getElementById('member-source');
+      const noteInput = document.getElementById('member-note');
+
+      const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[ch]));
+
+      const makeId = () => `m_${Date.now()}_${Math.random().toString(16).slice(2, 8)}`;
+      const normalize = (value) => String(value || '').trim();
+      const normalizeEmail = (value) => normalize(value).toLowerCase();
+      const todayKey = () => new Date().toISOString().slice(0, 10);
+      const formatDateTime = (iso) => new Intl.DateTimeFormat('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).format(new Date(iso));
+
+      function loadMembers() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(MEMBERS_KEY) || '[]');
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveMembers(nextMembers) {
+        localStorage.setItem(MEMBERS_KEY, JSON.stringify(nextMembers));
+      }
+
+      let members = loadMembers();
+      let adminUnlocked = sessionStorage.getItem(ADMIN_KEY) === '1';
+
+      function setAdminUnlocked(unlocked) {
+        adminUnlocked = unlocked;
+        if (unlocked) {
+          sessionStorage.setItem(ADMIN_KEY, '1');
+        } else {
+          sessionStorage.removeItem(ADMIN_KEY);
+        }
+        adminLock.hidden = unlocked;
+        adminPanel.classList.toggle('is-active', unlocked);
+      }
+
+      function matchesQuery(member, query) {
+        if (!query) return true;
+        const haystack = [
+          member.name,
+          member.phone,
+          member.email,
+          member.city,
+          member.source,
+          member.level,
+          member.note
+        ].join(' ').toLowerCase();
+        return haystack.includes(query.toLowerCase());
+      }
+
+      function render() {
+        const query = normalize(searchInput.value);
+        const level = filterSelect.value;
+        const filtered = members.filter((member) => {
+          const levelOk = level === 'all' || member.level === level;
+          return levelOk && matchesQuery(member, query);
+        });
+
+        const total = members.length;
+        const today = members.filter((member) => member.createdAt.slice(0, 10) === todayKey()).length;
+        const premium = members.filter((member) => ['金卡会员', '黑金会员'].includes(member.level)).length;
+
+        statTotal.textContent = total;
+        statToday.textContent = today;
+        statPremium.textContent = premium;
+
+        tableBody.innerHTML = filtered.map((member) => {
+          return `
+            <tr>
+              <td>
+                <strong>${escapeHtml(member.name)}</strong><br>
+                <small>${escapeHtml(member.city || '未填写城市')}</small>
+              </td>
+              <td>
+                ${escapeHtml(member.phone || '未填写手机')}<br>
+                <small>${escapeHtml(member.email || '未填写邮箱')}</small>
+              </td>
+              <td>
+                ${escapeHtml(member.level)}<br>
+                <small>${escapeHtml(member.source || '未知来源')}</small>
+              </td>
+              <td>${escapeHtml(formatDateTime(member.createdAt))}</td>
+              <td>${escapeHtml(member.note || '—')}</td>
+              <td>
+                <button class="mini-button ghost" data-remove="${escapeHtml(member.id)}" type="button">删除</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        emptyState.hidden = filtered.length !== 0;
+      }
+
+      function addMember(member) {
+        members = [member, ...members];
+        saveMembers(members);
+        render();
+      }
+
+      function removeMember(id) {
+        members = members.filter((member) => member.id !== id);
+        saveMembers(members);
+        render();
+      }
+
+      function downloadMembers() {
+        const payload = JSON.stringify(members, null, 2);
+        const blob = new Blob([payload], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'tripbox-members.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const name = normalize(nameInput.value);
+        const phone = normalize(phoneInput.value);
+        const email = normalizeEmail(emailInput.value);
+        const city = normalize(cityInput.value);
+        const note = normalize(noteInput.value);
+
+        if (!name || !phone || !email) {
+          alert('请先补全姓名、手机和邮箱。');
+          return;
+        }
+
+        if (members.some((member) => normalizeEmail(member.email) === email)) {
+          alert('这个邮箱已经注册过了。');
+          return;
+        }
+
+        addMember({
+          id: makeId(),
+          name,
+          phone,
+          email,
+          city,
+          level: levelInput.value,
+          source: sourceInput.value,
+          note,
+          createdAt: new Date().toISOString()
+        });
+
+        form.reset();
+        levelInput.value = '普通会员';
+        sourceInput.value = '网站首页';
+        alert('会员注册成功，后台已更新。');
+      });
+
+      unlockBtn.addEventListener('click', () => {
+        if (adminPass.value === ADMIN_PASSWORD) {
+          setAdminUnlocked(true);
+          render();
+        } else {
+          alert('口令不正确。');
+        }
+      });
+
+      logoutBtn.addEventListener('click', () => setAdminUnlocked(false));
+      exportBtn.addEventListener('click', downloadMembers);
+      searchInput.addEventListener('input', render);
+      filterSelect.addEventListener('change', render);
+      tableBody.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const id = target.getAttribute('data-remove');
+        if (!id) return;
+        if (confirm('确认删除这个会员吗？')) {
+          removeMember(id);
+        }
+      });
+
+      setAdminUnlocked(adminUnlocked);
+      render();
+    })();
+  </script>
 </body>
 </html>
