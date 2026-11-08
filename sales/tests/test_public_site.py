@@ -2,6 +2,7 @@
 from pathlib import Path
 import re
 import pytest
+import os
 from playwright.sync_api import sync_playwright
 
 SITE = Path(__file__).resolve().parents[1] / 'index.html'
@@ -9,7 +10,7 @@ SITE = Path(__file__).resolve().parents[1] / 'index.html'
 @pytest.fixture(scope='module')
 def browser():
     with sync_playwright() as playwright:
-        b = playwright.chromium.launch(headless=True, executable_path='/usr/bin/chromium', args=['--no-sandbox', '--disable-dev-shm-usage'])
+        b = playwright.chromium.launch(headless=True, executable_path=os.environ.get('SALES_CHROMIUM_PATH'), args=['--no-sandbox', '--disable-dev-shm-usage'])
         yield b
         b.close()
 
@@ -22,7 +23,7 @@ def new_page(browser, mobile=False):
     # Sandboxed Chromium may block file:// and network navigation.
     # Render the same tested HTML in-memory with a persistent storage shim.
     page.evaluate("Object.defineProperty(window, 'localStorage',{configurable:true,value:{_x:{},getItem(k){return this._x[k]||null},setItem(k,v){this._x[k]=v},removeItem(k){delete this._x[k]}}})")
-    page.set_content(SITE.read_text(), wait_until='load')
+    page.set_content(SITE.read_text().replace('<script src="config.js"></script>', '<script>'+ (SITE.parent/'config.js').read_text()+'</script>').replace('<script src="v5.js"></script>', '<script>'+ (SITE.parent/'v5.js').read_text()+'</script>').replace('<link rel="stylesheet" href="v5.css">','<style>'+(SITE.parent/'v5.css').read_text()+'</style>'), wait_until='load')
     return context, page, errors
 
 
@@ -59,7 +60,7 @@ def test_main_flow(browser):
         page = context.new_page()
         page.on('pageerror', lambda e: errors.append(str(e)))
         page.evaluate("Object.defineProperty(window, 'localStorage',{configurable:true,value:{_x:JSON.parse(" + repr(storage_copy) + "),getItem(k){return this._x[k]||null},setItem(k,v){this._x[k]=v},removeItem(k){delete this._x[k]}}})")
-        page.set_content(SITE.read_text(), wait_until='load')
+        page.set_content(SITE.read_text().replace('<script src="config.js"></script>', '<script>'+ (SITE.parent/'config.js').read_text()+'</script>').replace('<script src="v5.js"></script>', '<script>'+ (SITE.parent/'v5.js').read_text()+'</script>').replace('<link rel="stylesheet" href="v5.css">','<style>'+(SITE.parent/'v5.css').read_text()+'</style>'), wait_until='load')
         page.get_by_role('button', name='我的客户').click()
         page.locator('#listSearch').fill('演示客户甲')
         assert page.locator('.listtable tbody tr').count() == 1

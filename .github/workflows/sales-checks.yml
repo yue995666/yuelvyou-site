@@ -1,0 +1,23 @@
+name: Sales V5 checks
+on:
+  push:
+    paths: ['sales/**', '.github/workflows/sales-checks.yml']
+  pull_request:
+    paths: ['sales/**', '.github/workflows/sales-checks.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -r sales/requirements-test.txt
+      - run: python -m playwright install --with-deps chromium
+      - run: python -m pytest -q sales/tests
+      - run: node --test sales/backend/worker.test.mjs

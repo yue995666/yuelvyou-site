@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import pytest
+import os
 from playwright.sync_api import sync_playwright
 
 SITE = Path(__file__).resolve().parents[1] / 'index.html'
@@ -10,7 +11,7 @@ SITE = Path(__file__).resolve().parents[1] / 'index.html'
 @pytest.fixture(scope='module')
 def browser():
     with sync_playwright() as playwright:
-        b = playwright.chromium.launch(headless=True, executable_path='/usr/bin/chromium', args=['--no-sandbox','--disable-dev-shm-usage'])
+        b = playwright.chromium.launch(headless=True, executable_path=os.environ.get('SALES_CHROMIUM_PATH'), args=['--no-sandbox','--disable-dev-shm-usage'])
         yield b
         b.close()
 
@@ -21,7 +22,7 @@ def page_and_context(browser, mobile=False):
     errors = []
     page.on('pageerror', lambda error: errors.append(str(error)))
     page.evaluate("Object.defineProperty(window,'localStorage',{configurable:true,value:{_x:{},getItem(k){return this._x[k]||null},setItem(k,v){this._x[k]=v},removeItem(k){delete this._x[k]}}})")
-    page.set_content(SITE.read_text(),wait_until='load')
+    page.set_content(SITE.read_text().replace('<script src="config.js"></script>', '<script>'+ (SITE.parent/'config.js').read_text()+'</script>').replace('<script src="v5.js"></script>', '<script>'+ (SITE.parent/'v5.js').read_text()+'</script>').replace('<link rel="stylesheet" href="v5.css">','<style>'+(SITE.parent/'v5.css').read_text()+'</style>'),wait_until='load')
     return context,page,errors
 
 
@@ -63,7 +64,7 @@ def test_import_merges_without_overwriting_and_is_idempotent(browser):
         file_data={'name':'历史客户.json','mimeType':'application/json','buffer':json.dumps(archive,ensure_ascii=False).encode()}
         page.get_by_role('button',name='我的客户').click()
         page.locator('.sectiontitle input[type=file]').set_input_files(file_data)
-        assert page.evaluate('state.clients.length')==original+2
+        page.wait_for_function('state.clients.length === '+str(original+2))
         assert page.evaluate('state.tasks.length')==1
         assert page.evaluate("state.clients.find(c=>c.name==='测试学员甲').events[0].verified") is False
         assert '测试学员甲' in page.locator('body').inner_text()
@@ -75,7 +76,7 @@ def test_import_merges_without_overwriting_and_is_idempotent(browser):
         assert page.evaluate("state.clients.find(c=>c.name==='测试学员甲').confirmed") is True
         page.get_by_role('button',name='我的客户').click()
         page.locator('.sectiontitle input[type=file]').set_input_files(file_data)
-        assert page.evaluate('state.clients.length')==original+2
+        page.wait_for_function('state.clients.length === '+str(original+2))
         assert page.evaluate("state.clients.find(c=>c.name==='测试学员甲').confirmed") is True
         assert page.evaluate('state.tasks[0].title')=='保留原任务'
         assert not errors, errors
